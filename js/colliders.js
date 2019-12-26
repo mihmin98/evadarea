@@ -23,7 +23,7 @@ class Collider {
             return Math.pow(x2 - x1, 2) + Math.pow(y1 - y2, 2) < Math.pow(r1 + r2, 2);
         }
 
-        // TODO box - box
+        // TODO box - box, don't know if it is necessary
 
         // box - circle
         if (

@@ -10,7 +10,7 @@ class GameObject {
         this.image.src = sprite.src;
     }
 
-    draw() {
+    draw(context) {
         let image = this.image;
         let collider = this.collider;
         if (this.sprite != null) {
@@ -18,6 +18,7 @@ class GameObject {
             let y = this.position.y;
             let w = this.size.x;
             let h = this.size.y;
+            let sprite = this.sprite;
 
             if (this.image.complete) {
                 context.drawImage(
@@ -88,8 +89,8 @@ class GameObject {
 
     getCenter() {
         let center = new Vector2(this.position.x, this.position.y);
-        center.x += this.size.w / 2;
-        center.y += this.size.h / 2;
+        center.x += this.size.x / 2;
+        center.y += this.size.y / 2;
 
         return center;
     }

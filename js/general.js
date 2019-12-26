@@ -4,3 +4,11 @@ class Vector2 {
         this.y = y;
     }
 }
+
+class Sprite {
+    constructor(src, pos, size) {
+        this.src = src;
+        this.pos = pos;
+        this.size = size;
+    }
+}

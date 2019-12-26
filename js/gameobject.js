@@ -7,7 +7,7 @@ class GameObject {
         this.collider = collider;
 
         this.image = new Image();
-        this.image.src = sprite;
+        this.image.src = sprite.src;
     }
 
     draw() {
@@ -20,10 +20,30 @@ class GameObject {
             let h = this.size.y;
 
             if (this.image.complete) {
-                context.drawImage(image, x, y, w, h);
+                context.drawImage(
+                    image,
+                    sprite.pos.x,
+                    sprite.pos.y,
+                    sprite.size.x,
+                    sprite.size.y,
+                    x,
+                    y,
+                    w,
+                    h
+                );
             } else {
                 image.onload = function() {
-                    context.drawImage(image, x, y, w, h);
+                    context.drawImage(
+                        image,
+                        sprite.pos.x,
+                        sprite.pos.y,
+                        sprite.size.x,
+                        sprite.size.y,
+                        x,
+                        y,
+                        w,
+                        h
+                    );
                     console.log("image", image);
                 };
             }

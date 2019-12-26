@@ -1,5 +1,6 @@
 class GameObject {
-    constructor(position, size, sprite, collider) {
+    constructor(tag, position, size, sprite, collider) {
+        this.tag = tag;
         this.position = position;
         this.size = size;
         this.sprite = sprite;
@@ -76,7 +77,7 @@ class GameObject {
 
 class Player extends GameObject {
     constructor(position, size, sprite, collider, yTopLimit, yBotLimit) {
-        super(position, size, sprite, collider);
+        super("player", position, size, sprite, collider);
         this.yTopLimit = yTopLimit;
         this.yBotLimit = yBotLimit;
 
@@ -116,7 +117,7 @@ class Player extends GameObject {
 
 class Enemy extends GameObject {
     constructor(position, size, sprite, collider, speed) {
-        super(position, size, sprite, collider);
+        super("enemy", position, size, sprite, collider);
         this.speed = speed;
     }
 

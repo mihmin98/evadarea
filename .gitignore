@@ -1,3 +1,6 @@
 test/
 test/*
 .prettierrc
+*.xcf
+assets/sprites/original/*
+assets/sprites/original/

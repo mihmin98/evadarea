@@ -75,9 +75,11 @@ class GameObject {
 }
 
 class Player extends GameObject {
-    constructor(position, size, sprite, collider) {
+    constructor(position, size, sprite, collider, yTopLimit, yBotLimit) {
         super(position, size, sprite, collider);
-        
+        this.yTopLimit = yTopLimit;
+        this.yBotLimit = yBotLimit;
+
         //TODO: maybe put these in the constructor params???
         this.acceleration = 0.15;
         this.maxSpeed = 4;
@@ -99,6 +101,14 @@ class Player extends GameObject {
 
         let newPosition = new Vector2(this.position.x, this.position.y);
         newPosition.y += this.currentSpeed;
+
+        if (newPosition.y < this.yTopLimit) {
+            newPosition.y = this.yTopLimit;
+        }
+
+        if (newPosition.y > this.yBotLimit) {
+            newPosition.y = this.yBotLimit;
+        }
 
         this.translate(newPosition);
     }

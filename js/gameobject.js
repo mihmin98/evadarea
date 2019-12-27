@@ -107,7 +107,7 @@ class Player extends GameObject {
         this.yBotLimit = yBotLimit;
 
         //TODO: maybe put these in the constructor params???
-        this.acceleration = 0.15;
+        this.acceleration = 0.2;
         this.maxSpeed = 4;
         this.currentSpeed = 0;
         this.goUp = false;

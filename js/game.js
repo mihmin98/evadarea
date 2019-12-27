@@ -2,6 +2,7 @@ var canvas = document.getElementById("gamecanvas");
 var context = canvas.getContext("2d");
 
 var gameObjects = [];
+var speed = 5; // horizontal movement speed, should increase once every x distance
 
 player = new Player(
     new Vector2(50, 100),
@@ -14,6 +15,15 @@ player = new Player(
 player.collider = new CircleCollider(player.getCenter(), new Vector2(0, -3), 55);
 
 gameObjects.push(player);
+
+var enemySpawner = new EnemySpawner(
+    canvas.clientWidth + 200,
+    20,
+    canvas.clientHeight - 128 - 20,
+    2,
+    5,
+    speed
+);
 
 window.addEventListener(
     "keydown",
@@ -35,7 +45,11 @@ window.addEventListener(
     true
 );
 
+var lastTick = performance.now();
+var thisTick = performance.now();
+
 function update() {
+    enemySpawner.update(thisTick - lastTick, gameObjects);
     gameObjects.forEach(obj => {
         obj.update();
     });
@@ -51,6 +65,10 @@ function draw() {
 }
 
 function gameloop() {
+    // frame time stuff
+    lastTick = thisTick;
+    thisTick = performance.now();
+
     update();
     draw();
 

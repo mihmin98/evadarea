@@ -6,8 +6,12 @@ class GameObject {
         this.sprite = sprite;
         this.collider = collider;
 
-        this.image = new Image();
-        this.image.src = sprite.src;
+        if (sprite == null) {
+            this.image == null;
+        } else {
+            this.image = new Image();
+            this.image.src = sprite.src;
+        }
     }
 
     draw(context) {
@@ -153,28 +157,30 @@ class EnemySpawner extends GameObject {
     constructor(xPos, yTop, yBot, minTime, maxTime, speed) {
         super("spawner", null, null, null, null);
 
-        this.xPos;
+        this.xPos = xPos;
         this.yTop = yTop;
         this.yBot = yBot;
-        this.minTime = minTime;
-        this.maxTime = maxTime;
+        this.minTime = minTime * 1000;
+        this.maxTime = maxTime * 1000;
         this.speed = speed;
 
-        this.timeUntilSpawn = Math.floor(Math.random() * this.maxTime) + minTime;
+        this.timeUntilSpawn = Math.floor(Math.random() * this.maxTime) + this.minTime;
     }
 
     update(deltaTime, gameObjects) {
         this.timeUntilSpawn -= deltaTime;
         if (this.timeUntilSpawn <= 0) {
-            gameObjects.push(createEnemy());
+            let newEnemy = this.createEnemy();
+            console.log("spawned new enemy", newEnemy);
+            gameObjects.push(newEnemy);
 
-            this.timeUntilSpawn = Math.floor(Math.random() * this.maxTime) + minTime;
+            this.timeUntilSpawn = Math.floor(Math.random() * this.maxTime) + this.minTime;
         }
     }
 
     createEnemy() {
         let yPos = Math.floor(Math.random() * this.yBot) + this.yTop;
-        let enemyPos = new Vector2(xPos, yPos);
+        let enemyPos = new Vector2(this.xPos, yPos);
         let enemySize = new Vector2(128, 128);
         let enemyCenter = new Vector2(enemyPos.x + enemySize.x / 2, enemyPos.y + enemySize.y / 2);
         let enemySprite = new Sprite(

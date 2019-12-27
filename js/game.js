@@ -79,6 +79,23 @@ function printDebugInfo() {
     debugParagraph.innerHTML = "Distance: " + Math.floor(distance) + "<br>Speed: " + speed;
 }
 
+function checkCollisions() {
+    let n = gameObjects.length;
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            // player - enemy
+            if (
+                (gameObjects[i].tag === "player" && gameObjects[j].tag === "enemy") ||
+                (gameObjects[i].tag === "enemy" && gameObjects[j].tag === "player")
+            ) {
+                if (Collider.checkCollision(gameObjects[i].collider, gameObjects[j].collider)) {
+                    alert("ai murit");
+                }
+            }
+        }
+    }
+}
+
 function update() {
     updateDistance();
 
@@ -87,7 +104,7 @@ function update() {
         obj.update();
     });
 
-    // TODO: Check collisions
+    checkCollisions();
 
     printDebugInfo();
 }
@@ -100,9 +117,7 @@ function draw() {
 }
 
 function gameloop() {
-    // frame time stuff
     tick();
-
     update();
     draw();
 

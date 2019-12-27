@@ -3,6 +3,13 @@ var context = canvas.getContext("2d");
 
 var gameObjects = [];
 var speed = 5; // horizontal movement speed, should increase once every x distance
+var speedIncrement = 0.01; // the amount of speed that should be increased
+var speedIncrementDistance = 10;
+
+var distance = 0;
+var distanceUntilSpeedIncrement = speedIncrementDistance;
+
+var debugParagraph = document.getElementById("p-debug");
 
 player = new Player(
     new Vector2(50, 100),
@@ -20,8 +27,8 @@ var enemySpawner = new EnemySpawner(
     canvas.clientWidth + 200,
     20,
     canvas.clientHeight - 128 - 20,
-    2,
-    5,
+    1,
+    3,
     speed
 );
 
@@ -47,14 +54,42 @@ window.addEventListener(
 
 var lastTick = performance.now();
 var thisTick = performance.now();
+var deltaTime = thisTick - lastTick;
+
+function tick() {
+    lastTick = thisTick;
+    thisTick = performance.now();
+    deltaTime = thisTick - lastTick;
+}
+
+function updateDistance() {
+    let d = (speed * deltaTime) / 1000;
+    distance += d;
+    distanceUntilSpeedIncrement -= d;
+
+    if (distanceUntilSpeedIncrement <= 0) {
+        distanceUntilSpeedIncrement = speedIncrementDistance;
+        speed += speedIncrement;
+
+        enemySpawner.speed = speed;
+    }
+}
+
+function printDebugInfo() {
+    debugParagraph.innerHTML = "Distance: " + Math.floor(distance) + "<br>Speed: " + speed;
+}
 
 function update() {
-    enemySpawner.update(thisTick - lastTick, gameObjects);
+    updateDistance();
+
+    enemySpawner.update(deltaTime, gameObjects);
     gameObjects.forEach(obj => {
         obj.update();
     });
 
     // TODO: Check collisions
+
+    printDebugInfo();
 }
 
 function draw() {
@@ -66,8 +101,7 @@ function draw() {
 
 function gameloop() {
     // frame time stuff
-    lastTick = thisTick;
-    thisTick = performance.now();
+    tick();
 
     update();
     draw();

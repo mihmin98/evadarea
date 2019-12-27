@@ -148,3 +148,70 @@ class Enemy extends GameObject {
         this.translate(newPosition);
     }
 }
+
+class EnemySpawner extends GameObject {
+    constructor(xPos, yTop, yBot, minTime, maxTime, speed) {
+        super("spawner", null, null, null, null);
+
+        this.xPos;
+        this.yTop = yTop;
+        this.yBot = yBot;
+        this.minTime = minTime;
+        this.maxTime = maxTime;
+        this.speed = speed;
+
+        this.timeUntilSpawn = Math.floor(Math.random() * this.maxTime) + minTime;
+    }
+
+    update(deltaTime, gameObjects) {
+        this.timeUntilSpawn -= deltaTime;
+        if (this.timeUntilSpawn <= 0) {
+            gameObjects.push(createEnemy());
+
+            this.timeUntilSpawn = Math.floor(Math.random() * this.maxTime) + minTime;
+        }
+    }
+
+    createEnemy() {
+        let yPos = Math.floor(Math.random() * this.yBot) + this.yTop;
+        let enemyPos = new Vector2(xPos, yPos);
+        let enemySize = new Vector2(128, 128);
+        let enemyCenter = new Vector2(enemyPos.x + enemySize.x / 2, enemyPos.y + enemySize.y / 2);
+        let enemySprite = new Sprite(
+            "/assets/sprites/spritesheet.png",
+            null,
+            new Vector2(128, 128)
+        );
+        let enemyCollider = null;
+        let enemyType = Math.floor(Math.random() * 3);
+
+        switch (enemyType) {
+            case 0:
+                enemySprite.pos = new Vector2(128, 0);
+                enemyCollider = new BoxCollider(
+                    enemyCenter,
+                    new Vector2(0, 0),
+                    new Vector2(80, 115)
+                );
+                break;
+            case 1:
+                enemySprite.pos = new Vector2(256, 0);
+                enemyCollider = new BoxCollider(
+                    enemyCenter,
+                    new Vector2(0, 5),
+                    new Vector2(80, 115)
+                );
+                break;
+            case 2:
+                enemySprite.pos = new Vector2(384, 0);
+                enemyCollider = new BoxCollider(
+                    enemyCenter,
+                    new Vector2(3, 5),
+                    new Vector2(65, 115)
+                );
+                break;
+        }
+
+        return new Enemy(enemyPos, enemySize, enemySprite, enemyCollider, this.speed);
+    }
+}

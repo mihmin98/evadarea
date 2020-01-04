@@ -1,13 +1,16 @@
 .ui-container {
     display: flex;
     width: 400px;
-    height: 250px;
-    background: rgba(128, 128, 128, 0.5);
-    align-content: center;
+    height: 600px;
+    background: rgba(128, 128, 128, 0.9);
+    /*align-content: center;*/
     text-align: center;
     font-size: 40px;
     flex-direction: column;
     border-radius: 20px;
+    position: absolute;
+    left: 750px;
+    top: 50px;
 }
 
 .ui-button {

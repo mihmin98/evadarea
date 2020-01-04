@@ -1,5 +1,6 @@
 var canvas = document.getElementById("gamecanvas");
 var context = canvas.getContext("2d");
+var body = document.getElementsByTagName("body")[0];
 
 window.addEventListener(
     "keydown",
@@ -15,19 +16,78 @@ window.addEventListener(
     "keyup",
     function(event) {
         if (event.keyCode == 32) {
+            // SPACE
             player.goUp = false;
+        } else if (event.keyCode == 27) {
+            // ESC
+            if (gameState === GameStates.PLAYING) {
+                pauseGame();
+            } else if (gameState === GameStates.PAUSED) {
+                resumeGame();
+            }
         }
     },
     true
 );
 
+const GameStates = {
+    MAIN_MENU: 0,
+    PLAYING: 1,
+    PAUSED: 2,
+    GAME_OVER: 3
+};
+
+gameState = GameStates.PLAYING;
+
+function pauseGame() {
+    gameState = GameStates.PAUSED;
+    body.appendChild(pause_ui);
+    let pause_ui_resume_btn = document.getElementById("pause-ui-resume-button");
+    pause_ui_resume_btn.addEventListener("click", resumeGame);
+}
+
+function resumeGame() {
+    gameState = GameStates.PLAYING;
+    body.removeChild(document.getElementById("pause-ui-container"));
+}
+
+function gameOver() {
+    gameState = GameStates.GAME_OVER;
+    body.appendChild(gameover_ui);
+
+    score = Math.floor(distance);
+    let gameover_ui_score = document.getElementById("gameover-ui-score");
+    gameover_ui_score.textContent += score;
+
+    let gameover_ui_restart_btn = document.getElementById("gameover-ui-restart-button");
+    gameover_ui_restart_btn.addEventListener("click", startGame);
+}
+
+function exitGame() {
+    gameState = GameStates.MAIN_MENU;
+}
+
+function startGame() {
+    // Remove other ui
+    if (gameState == GameStates.GAME_OVER) {
+        body.removeChild(document.getElementById("gameover-ui-container"));
+    }
+
+    //TODO: Do the same thing for main menu
+
+    gameState = GameStates.PLAYING;
+    start();
+}
+
 function init() {
     gameObjects = [];
-    speed = 5; // horizontal movement speed, should increase once every x distance
-    speedIncrement = 0.01; // the amount of speed that should be increased
-    speedIncrementDistance = 10;
 
     distance = 0;
+
+    speed = 5; // horizontal movement speed, should increase once every x distance
+    speedIncrement = 0.03; // the amount of speed that should be increased
+    speedIncrementDistance = 10; // how often should the speed increase
+
     distanceUntilSpeedIncrement = speedIncrementDistance;
 
     player = new Player(
@@ -35,7 +95,7 @@ function init() {
         new Vector2(128, 128),
         new Sprite("/assets/sprites/spritesheet.png", new Vector2(0, 0), new Vector2(128, 128)),
         null,
-        20,
+        20 + 40,
         canvas.clientHeight - 128 - 20
     );
     player.collider = new CircleCollider(player.getCenter(), new Vector2(0, -3), 55);
@@ -44,16 +104,25 @@ function init() {
 
     enemySpawner = new EnemySpawner(
         canvas.clientWidth + 200,
-        20,
+        20 + 40,
         canvas.clientHeight - 128 - 20,
         1,
-        3,
+        2.5,
         speed
     );
 
     lastTick = performance.now();
     thisTick = performance.now();
     deltaTime = thisTick - lastTick;
+}
+
+function reinit() {
+    delete player;
+    delete enemySpawner;
+    gameObjects.forEach(obj => {
+        delete obj;
+    });
+
 }
 
 function tick() {
@@ -91,7 +160,7 @@ function checkCollisions() {
                 (gameObjects[i].tag === "enemy" && gameObjects[j].tag === "player")
             ) {
                 if (Collider.checkCollision(gameObjects[i].collider, gameObjects[j].collider)) {
-                    alert("ai murit");
+                    gameOver();
                 }
             }
         }
@@ -99,14 +168,16 @@ function checkCollisions() {
 }
 
 function update() {
-    updateDistance();
+    if (gameState == GameStates.PLAYING) {
+        updateDistance();
 
-    enemySpawner.update(deltaTime, gameObjects);
-    gameObjects.forEach(obj => {
-        obj.update();
-    });
+        enemySpawner.update(deltaTime, gameObjects);
+        gameObjects.forEach(obj => {
+            obj.update();
+        });
 
-    checkCollisions();
+        checkCollisions();
+    }
 
     printDebugInfo();
 }
@@ -116,9 +187,16 @@ function draw() {
     gameObjects.forEach(obj => {
         obj.draw(context);
     });
+
+    context.font = "30px Arial";
+    context.fillText("Distance: " + Math.floor(distance), 10, 40);
 }
 
 function gameloop() {
+    if (gameState != GameStates.PLAYING && gameState != GameStates.PAUSED){
+        return;
+    }
+    
     tick();
     update();
     draw();
@@ -131,4 +209,4 @@ function start() {
     gameloop();
 }
 
-canvas.onload = start();
+canvas.onload = startGame();

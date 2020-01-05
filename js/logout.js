@@ -1,0 +1,1 @@
+window.localStorage.setItem("logged_id", JSON.stringify(false));

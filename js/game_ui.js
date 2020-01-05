@@ -1,3 +1,42 @@
+//////////////////
+// MAIN MENU UI //
+//////////////////
+var mainMenuUi = document.createElement("div");
+mainMenuUi.setAttribute("class", "ui-container");
+mainMenuUi.setAttribute("id", "mainmenu-ui-container");
+
+var mainMenuTitle = document.createElement("p");
+mainMenuTitle.textContent = "DANI MOCANU<br>EVADAREA";
+mainMenuUi.appendChild(mainMenuTitle);
+
+var mainMenuPlay = document.createElement("a");
+mainMenuPlay.setAttribute("href", "#");
+mainMenuPlay.setAttribute("class", "ui-button");
+mainMenuPlay.setAttribute("id", "mainmenu-ui-play-button");
+mainMenuPlay.textContent = "Play";
+mainMenuUi.appendChild(mainMenuPlay);
+
+var mainMenuHighscore = document.createElement("a");
+mainMenuHighscore.setAttribute("href", "/highscores.html");
+mainMenuHighscore.setAttribute("class", "ui-button");
+mainMenuHighscore.setAttribute("id", "mainmenu-ui-highscore-button");
+mainMenuHighscore.textContent = "Highscores";
+mainMenuUi.appendChild(mainMenuHighscore);
+
+var mainMenuLogin = document.createElement("a");
+mainMenuLogin.setAttribute("href", "/login.html");
+mainMenuLogin.setAttribute("class", "ui-button");
+mainMenuLogin.setAttribute("id", "mainmenu-ui-login-button");
+mainMenuLogin.textContent = "Login";
+mainMenuUi.appendChild(mainMenuLogin);
+
+var mainMenuLogout = document.createElement("a");
+mainMenuLogout.setAttribute("href", "/logout.html");
+mainMenuLogout.setAttribute("class", "ui-button");
+mainMenuLogout.setAttribute("id", "mainmenu-ui-logout-button");
+mainMenuLogout.textContent = "Logout";
+mainMenuUi.appendChild(mainMenuLogout);
+
 //////////////
 // PAUSE UI //
 //////////////

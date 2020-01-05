@@ -43,7 +43,7 @@ function pauseGame() {
     gameState = GameStates.PAUSED;
     audioManager.audioComponents[0].pause();
     body.appendChild(pause_ui);
-    
+
     let pause_ui_resume_btn = document.getElementById("pause-ui-resume-button");
     pause_ui_resume_btn.addEventListener("click", resumeGame);
 
@@ -90,17 +90,17 @@ function exitGame() {
 
 function mainMenu() {
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-    
+
     gameState = GameStates.MAIN_MENU;
 
     body.appendChild(mainMenuUi);
     let mainMenuUiContainer = document.getElementById("mainmenu-ui-container");
 
-    let loginState = window.localStorage.getItem("logged_in");
-    if (loginState == null || loginState == false) {
-        mainMenuUiContainer.removeChild(document.getElementById("mainmenu-ui-logout-button"));
-    } else if (loginState == true) {
+    let loginState = JSON.parse(window.localStorage.getItem("logged_in"));
+    if (loginState == true) {
         mainMenuUiContainer.removeChild(document.getElementById("mainmenu-ui-login-button"));
+    } else {
+        mainMenuUiContainer.removeChild(document.getElementById("mainmenu-ui-logout-button"));
     }
 
     let playBtn = document.getElementById("mainmenu-ui-play-button");
@@ -222,6 +222,7 @@ function update() {
         enemySpawner.update(deltaTime, gameObjects);
         gameObjects.forEach(obj => {
             obj.update();
+            // TODO: cand un dujman a trecut departe de player sa il scot din lista si sa il distrug
         });
 
         checkCollisions();

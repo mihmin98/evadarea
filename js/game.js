@@ -63,10 +63,30 @@ function gameOver() {
 
     let gameover_ui_restart_btn = document.getElementById("gameover-ui-restart-button");
     gameover_ui_restart_btn.addEventListener("click", startGame);
+
+    // La GameOver sa se ia din localStorage scorul pt userul logat curent
+    // Daca nu exista sau scoru curent e mai mare se baga in localStorage
 }
 
 function exitGame() {
     gameState = GameStates.MAIN_MENU;
+
+    if (gameState == GameStates.GAME_OVER) {
+        body.removeChild(document.getElementById("gameover-ui-container"));
+    }
+
+    if (gameState == GameStates.PAUSED) {
+        body.removeChild(document.getElementById("pause-ui-container"));
+    }
+
+    gameObjects = [];
+    audioManager.audioComponents[0].pause();
+
+    mainMenu();
+}
+
+function mainMenu() {
+    
 }
 
 function startGame() {
@@ -119,6 +139,7 @@ function init() {
     thisTick = performance.now();
     deltaTime = thisTick - lastTick;
 
+    audioManager.audioComponents[0].currentTime = 0;
     audioManager.audioComponents[0].play();
 }
 

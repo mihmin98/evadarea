@@ -6,7 +6,7 @@ mainMenuUi.setAttribute("class", "ui-container");
 mainMenuUi.setAttribute("id", "mainmenu-ui-container");
 
 var mainMenuTitle = document.createElement("p");
-mainMenuTitle.textContent = "DANI MOCANU<br>EVADAREA";
+mainMenuTitle.textContent = "DANI MOCANU\nEVADAREA";
 mainMenuUi.appendChild(mainMenuTitle);
 
 var mainMenuPlay = document.createElement("a");

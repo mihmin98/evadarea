@@ -43,8 +43,12 @@ function pauseGame() {
     gameState = GameStates.PAUSED;
     audioManager.audioComponents[0].pause();
     body.appendChild(pause_ui);
+    
     let pause_ui_resume_btn = document.getElementById("pause-ui-resume-button");
     pause_ui_resume_btn.addEventListener("click", resumeGame);
+
+    let pauseUiExitBtn = document.getElementById("pause-ui-exit-button");
+    pauseUiExitBtn.addEventListener("click", exitGame);
 }
 
 function resumeGame() {
@@ -64,13 +68,12 @@ function gameOver() {
     let gameover_ui_restart_btn = document.getElementById("gameover-ui-restart-button");
     gameover_ui_restart_btn.addEventListener("click", startGame);
 
+    // TODO
     // La GameOver sa se ia din localStorage scorul pt userul logat curent
     // Daca nu exista sau scoru curent e mai mare se baga in localStorage
 }
 
 function exitGame() {
-    gameState = GameStates.MAIN_MENU;
-
     if (gameState == GameStates.GAME_OVER) {
         body.removeChild(document.getElementById("gameover-ui-container"));
     }
@@ -86,7 +89,22 @@ function exitGame() {
 }
 
 function mainMenu() {
+    context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     
+    gameState = GameStates.MAIN_MENU;
+
+    body.appendChild(mainMenuUi);
+    let mainMenuUiContainer = document.getElementById("mainmenu-ui-container");
+
+    let loginState = window.localStorage.getItem("logged_in");
+    if (loginState == null || loginState == false) {
+        mainMenuUiContainer.removeChild(document.getElementById("mainmenu-ui-logout-button"));
+    } else if (loginState == true) {
+        mainMenuUiContainer.removeChild(document.getElementById("mainmenu-ui-login-button"));
+    }
+
+    let playBtn = document.getElementById("mainmenu-ui-play-button");
+    playBtn.addEventListener("click", startGame);
 }
 
 function startGame() {
@@ -239,4 +257,4 @@ function start() {
     gameloop();
 }
 
-canvas.onload = startGame();
+canvas.onload = mainMenu();

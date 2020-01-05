@@ -73,7 +73,9 @@ function startGame() {
         body.removeChild(document.getElementById("gameover-ui-container"));
     }
 
-    //TODO: Do the same thing for main menu
+    if (gameState == GameStates.MAIN_MENU) {
+        body.removeChild(document.getElementById("mainmenu-ui-container"));
+    }
 
     gameState = GameStates.PLAYING;
     start();
@@ -122,7 +124,6 @@ function reinit() {
     gameObjects.forEach(obj => {
         delete obj;
     });
-
 }
 
 function tick() {
@@ -193,10 +194,10 @@ function draw() {
 }
 
 function gameloop() {
-    if (gameState != GameStates.PLAYING && gameState != GameStates.PAUSED){
+    if (gameState != GameStates.PLAYING && gameState != GameStates.PAUSED) {
         return;
     }
-    
+
     tick();
     update();
     draw();

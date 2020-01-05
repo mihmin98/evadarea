@@ -41,6 +41,7 @@ gameState = GameStates.PLAYING;
 
 function pauseGame() {
     gameState = GameStates.PAUSED;
+    audioManager.audioComponents[0].pause();
     body.appendChild(pause_ui);
     let pause_ui_resume_btn = document.getElementById("pause-ui-resume-button");
     pause_ui_resume_btn.addEventListener("click", resumeGame);
@@ -48,6 +49,7 @@ function pauseGame() {
 
 function resumeGame() {
     gameState = GameStates.PLAYING;
+    audioManager.audioComponents[0].play();
     body.removeChild(document.getElementById("pause-ui-container"));
 }
 
@@ -116,6 +118,8 @@ function init() {
     lastTick = performance.now();
     thisTick = performance.now();
     deltaTime = thisTick - lastTick;
+
+    audioManager.audioComponents[0].play();
 }
 
 function reinit() {
@@ -150,6 +154,10 @@ var debugParagraph = document.getElementById("p-debug");
 function printDebugInfo() {
     debugParagraph.innerHTML = "Distance: " + Math.floor(distance) + "<br>Speed: " + speed;
 }
+
+audioManager = new AudioManager(null);
+audioManager.audioSources.push("/assets/audio/dani_mocanu_evadarea.ogg");
+audioManager.create(0, true); //background music
 
 function checkCollisions() {
     let n = gameObjects.length;

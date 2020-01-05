@@ -1,2 +1,2 @@
-window.localStorage.setItem("logged_id", JSON.stringify(false));
+window.localStorage.setItem("logged_in", JSON.stringify(false));
 window.location.href = "/index.html";

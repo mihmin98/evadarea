@@ -3,6 +3,7 @@ var body = document.getElementsByTagName("body")[0];
 let div = document.createElement("div");
 div.innerHTML += "<h2>Highscores<h2><br><br>";
 
+// Get highscores from localStorage
 let highscores = JSON.parse(window.localStorage.getItem("highscores"));
 if (highscores == null) {
     highscores = [];

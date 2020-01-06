@@ -290,7 +290,7 @@ function update() {
 function draw() {
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     gameObjects.forEach(obj => {
-        obj.draw(context);
+        obj.draw(context, false);
     });
 
     context.font = "30px Arial";

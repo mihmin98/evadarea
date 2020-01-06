@@ -1,10 +1,10 @@
 class GameObject {
     constructor(tag, position, size, sprite, collider) {
-        this.tag = tag;
+        this.tag = tag; // The tag says if the GameObject is a player or enemy or something else
         this.position = position;
         this.size = size;
         this.sprite = sprite;
-        this.collider = collider;
+        this.collider = collider; // The collider attached to the GameObject
 
         if (sprite == null) {
             this.image == null;
@@ -14,7 +14,7 @@ class GameObject {
         }
     }
 
-    draw(context) {
+    draw(context, debug) {
         let image = this.image;
         let collider = this.collider;
         if (this.sprite != null) {
@@ -54,8 +54,8 @@ class GameObject {
             }
         }
 
-        //draw collider
-        if (collider != null) {
+        // Draw collider
+        if (debug && collider != null) {
             if (collider.type === "circle") {
                 context.beginPath();
                 context.strokeStyle = "green";
@@ -80,6 +80,7 @@ class GameObject {
         }
     }
 
+    // Move the GameObject to the desired position
     translate(destination) {
         this.position.x = destination.x;
         this.position.y = destination.y;
@@ -120,7 +121,7 @@ class Player extends GameObject {
             this.currentSpeed += this.acceleration;
         }
 
-        // clamp the speed between -maxSpeed and maxSpeed
+        // Clamp the speed between -maxSpeed and maxSpeed
         if (Math.abs(this.currentSpeed) > this.maxSpeed) {
             this.currentSpeed = Math.sign(this.currentSpeed) * this.maxSpeed;
         }
@@ -164,6 +165,7 @@ class EnemySpawner extends GameObject {
         this.maxTime = maxTime * 1000;
         this.speed = speed;
 
+        // Get random value between minTime and maxTime
         this.timeUntilSpawn = Math.floor(Math.random() * this.maxTime) + this.minTime;
     }
 

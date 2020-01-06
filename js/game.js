@@ -6,6 +6,7 @@ window.addEventListener(
     "keydown",
     function(event) {
         if (event.keyCode == 32) {
+            // On press SPACE make the player go up
             player.goUp = true;
         }
     },
@@ -16,10 +17,10 @@ window.addEventListener(
     "keyup",
     function(event) {
         if (event.keyCode == 32) {
-            // SPACE
+            // On release SPACE make the player go down
             player.goUp = false;
         } else if (event.keyCode == 27) {
-            // ESC
+            // On release ESC toggle pause state
             if (gameState === GameStates.PLAYING) {
                 pauseGame();
             } else if (gameState === GameStates.PAUSED) {
@@ -30,6 +31,7 @@ window.addEventListener(
     true
 );
 
+// Enum to keep track of the current gameState
 const GameStates = {
     MAIN_MENU: 0,
     PLAYING: 1,
@@ -37,13 +39,13 @@ const GameStates = {
     GAME_OVER: 3
 };
 
-gameState = GameStates.PLAYING;
-
 function pauseGame() {
     gameState = GameStates.PAUSED;
+    // Pause the background music
     audioManager.audioComponents[0].pause();
     body.appendChild(pause_ui);
 
+    // Add onclick to the buttons
     let pause_ui_resume_btn = document.getElementById("pause-ui-resume-button");
     pause_ui_resume_btn.addEventListener("click", resumeGame);
 
@@ -53,6 +55,8 @@ function pauseGame() {
 
 function resumeGame() {
     gameState = GameStates.PLAYING;
+
+    // Resume the background music
     audioManager.audioComponents[0].play();
     body.removeChild(document.getElementById("pause-ui-container"));
 }
@@ -65,14 +69,15 @@ function gameOver() {
     let gameover_ui_score = document.getElementById("gameover-ui-score");
     gameover_ui_score.textContent += score;
 
+    // Add onclick to the buttons
     let gameover_ui_restart_btn = document.getElementById("gameover-ui-restart-button");
     gameover_ui_restart_btn.addEventListener("click", startGame);
 
     let gameOverUiExit = document.getElementById("gameover-ui-exit-button");
     gameOverUiExit.addEventListener("click", exitGame);
 
-    // La GameOver sa se ia din localStorage scorul pt userul logat curent
-    // Daca nu exista sau scoru curent e mai mare se baga in localStorage
+    // On GameOver get the score from localStorage for the logged user
+    // If it does not exist or the current score is higher, change the localStorage
     let logged_in = JSON.parse(window.localStorage.getItem("logged_in"));
     if (logged_in) {
         let highscores = JSON.parse(window.localStorage.getItem("highscores"));
@@ -95,7 +100,7 @@ function gameOver() {
                 score: score
             };
             highscores.push(newHighscore);
-        } else {
+        } else if (score > highscores[i].score) {
             highscores[i].score = score;
         }
 
@@ -113,13 +118,17 @@ function exitGame() {
         body.removeChild(document.getElementById("pause-ui-container"));
     }
 
-    gameObjects = [];
+    // On exit delete all gameobjects
+    cleanup()
+
+    // Pause the audio
     audioManager.audioComponents[0].pause();
 
     mainMenu();
 }
 
 function mainMenu() {
+    // Clear the canvas
     context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
     gameState = GameStates.MAIN_MENU;
@@ -127,6 +136,7 @@ function mainMenu() {
     body.appendChild(mainMenuUi);
     let mainMenuUiContainer = document.getElementById("mainmenu-ui-container");
 
+    // Show the Login or Logout button depending on the logged_in state
     let loginState = JSON.parse(window.localStorage.getItem("logged_in"));
     if (loginState == true) {
         mainMenuUiContainer.removeChild(document.getElementById("mainmenu-ui-login-button"));
@@ -164,35 +174,37 @@ function init() {
     distanceUntilSpeedIncrement = speedIncrementDistance;
 
     player = new Player(
-        new Vector2(50, 100),
-        new Vector2(128, 128),
-        new Sprite("/assets/sprites/spritesheet.png", new Vector2(0, 0), new Vector2(128, 128)),
-        null,
-        20 + 40,
-        canvas.clientHeight - 128 - 20
+        new Vector2(50, 100), // Position
+        new Vector2(128, 128), // Size
+        new Sprite("/assets/sprites/spritesheet.png", new Vector2(0, 0), new Vector2(128, 128)), // Sprite
+        null, // Collider
+        20 + 40, // yTopLimit
+        canvas.clientHeight - 128 - 20 // yBotLimit
     );
     player.collider = new CircleCollider(player.getCenter(), new Vector2(0, -3), 55);
 
     gameObjects.push(player);
 
     enemySpawner = new EnemySpawner(
-        canvas.clientWidth + 200,
-        20 + 40,
-        canvas.clientHeight - 128 - 20,
-        1,
-        2.5,
-        speed
+        canvas.clientWidth + 200, // xPos
+        20 + 40, // yTop
+        canvas.clientHeight - 128 - 20, // yBot
+        1, // minTime
+        2.5, // maxTime
+        speed // speed
     );
 
     lastTick = performance.now();
     thisTick = performance.now();
     deltaTime = thisTick - lastTick;
 
+    // (Re)Start background music
     audioManager.audioComponents[0].currentTime = 0;
     audioManager.audioComponents[0].play();
 }
 
-function reinit() {
+function cleanup() {
+    // Delete all gameobjects
     delete player;
     delete enemySpawner;
     gameObjects.forEach(obj => {
@@ -219,12 +231,14 @@ function updateDistance() {
     }
 }
 
+// Paragraph to display debug info
 var debugParagraph = document.getElementById("p-debug");
 
 function printDebugInfo() {
     debugParagraph.innerHTML = "Distance: " + Math.floor(distance) + "<br>Speed: " + speed;
 }
 
+// Create audio manager
 audioManager = new AudioManager(null);
 audioManager.audioSources.push("/assets/audio/dani_mocanu_evadarea.ogg");
 audioManager.create(0, true); //background music
@@ -254,7 +268,7 @@ function update() {
         let toDestroyIndex = [];
         gameObjects.forEach(obj => {
             obj.update();
-            // cand un obiect a trecut departe de player sa il scot din lista si sa il distrug
+            // When an object has passed the player, remove it from the list and delete it
             if (player.position.x - obj.position.x > 200) {
                 toDestroyIndex.push(gameObjects.indexOf(obj));
             }

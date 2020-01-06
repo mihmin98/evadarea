@@ -251,10 +251,21 @@ function update() {
         updateDistance();
 
         enemySpawner.update(deltaTime, gameObjects);
+        let toDestroyIndex = [];
         gameObjects.forEach(obj => {
             obj.update();
-            // TODO: cand un dujman a trecut departe de player sa il scot din lista si sa il distrug
+            // cand un obiect a trecut departe de player sa il scot din lista si sa il distrug
+            if (player.position.x - obj.position.x > 200) {
+                toDestroyIndex.push(gameObjects.indexOf(obj));
+            }
         });
+
+        let i;
+        for (i = 0; i < toDestroyIndex.length; i++) {
+            let obj = gameObjects[toDestroyIndex[i]];
+            gameObjects.splice(toDestroyIndex[i], 1);
+            delete obj;
+        }
 
         checkCollisions();
     }

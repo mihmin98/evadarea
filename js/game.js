@@ -68,9 +68,40 @@ function gameOver() {
     let gameover_ui_restart_btn = document.getElementById("gameover-ui-restart-button");
     gameover_ui_restart_btn.addEventListener("click", startGame);
 
-    // TODO
+    let gameOverUiExit = document.getElementById("gameover-ui-exit-button");
+    gameOverUiExit.addEventListener("click", exitGame);
+
     // La GameOver sa se ia din localStorage scorul pt userul logat curent
     // Daca nu exista sau scoru curent e mai mare se baga in localStorage
+    let logged_in = JSON.parse(window.localStorage.getItem("logged_in"));
+    if (logged_in) {
+        let highscores = JSON.parse(window.localStorage.getItem("highscores"));
+        if (highscores == null) {
+            highscores = [];
+        }
+        let username = window.localStorage.getItem("username");
+        let i;
+        let found = false;
+        for (i = 0; i < highscores.length; i++) {
+            if (highscores[i].user === username) {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            let newHighscore = {
+                user: username,
+                score: score
+            };
+            highscores.push(newHighscore);
+        } else {
+            highscores[i].score = score;
+        }
+
+        json = JSON.stringify(highscores);
+        window.localStorage.setItem("highscores", json);
+    }
 }
 
 function exitGame() {

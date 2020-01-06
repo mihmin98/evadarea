@@ -1,8 +1,8 @@
 class Collider {
     constructor(type, origin, offset) {
-        this.type = type;
-        this.origin = origin;
-        this.offset = offset;
+        this.type = type; // The shape of the collider: box, circle
+        this.origin = origin; // origin of the collider
+        this.offset = offset; // offset from the origin
 
         this.position = new Vector2();
         this.position.x = origin.x + offset.x;

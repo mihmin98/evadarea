@@ -39,34 +39,32 @@ checkboxInput.setAttribute("value", "hatz");
 div.appendChild(checkboxInput);
 
 div.innerHTML += "<br>Age: ";
-let radioInput1 = document.createElement("input");
-radioInput1.setAttribute("type", "radio");
-radioInput1.setAttribute("name", "age");
-radioInput1.setAttribute("value", "under_18");
-radioInput1.setAttribute("id", "radio-1-input");
-div.appendChild(radioInput1);
+
+let radioInput = document.createElement("input");
+radioInput.setAttribute("type", "radio");
+radioInput.setAttribute("name", "age");
+radioInput.setAttribute("value", "under_18");
+div.appendChild(radioInput);
 div.innerHTML += "<18<br>";
 
-let radioInput2 = document.createElement("input");
-radioInput2.setAttribute("type", "radio");
-radioInput2.setAttribute("name", "age");
-radioInput2.setAttribute("value", "18_35");
-radioInput2.setAttribute("id", "radio-2-input");
-div.appendChild(radioInput2);
+radioInput = document.createElement("input");
+radioInput.setAttribute("type", "radio");
+radioInput.setAttribute("name", "age");
+radioInput.setAttribute("value", "18_35");
+div.appendChild(radioInput);
 div.innerHTML += "18 - 35<br>";
 
-let radioInput3 = document.createElement("input");
-radioInput3.setAttribute("type", "radio");
-radioInput3.setAttribute("name", "age");
-radioInput3.setAttribute("value", "over_35");
-radioInput3.setAttribute("id", "radio-3-input");
-div.appendChild(radioInput3);
+radioInput = document.createElement("input");
+radioInput.setAttribute("type", "radio");
+radioInput.setAttribute("name", "age");
+radioInput.setAttribute("value", "over_35");
+div.appendChild(radioInput);
 div.innerHTML += ">35<br><br>";
 
 div.innerHTML += "How much do you like Dani Mocanu?<br>";
 let rangeInput = document.createElement("input");
 rangeInput.setAttribute("type", "range");
-rangeInput.setAttribute("min", "1");
+rangeInput.setAttribute("min", "0");
 rangeInput.setAttribute("max", "10");
 rangeInput.setAttribute("value", "10");
 rangeInput.setAttribute("step", "1");
